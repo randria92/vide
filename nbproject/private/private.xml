@@ -3,7 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/Beans/LigneDeCommande.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/web/WEB-INF/jspCommandeS.jsp</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/traitement/GestionCommande.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/Beans/OuvrageEva.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/accesBDD/LigneDeCommandeDAO.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/Beans/Commande.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/accesBDD/CommandeDAO.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/Servlets/controller.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/web/WEB-INF/menus/menu-main.jsp</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/web/index.jsp</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/web/WEB-INF/jspAcceuil.jsp</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/Beans/StatusLibrairie.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/traitement/GestionStatus.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/accesBDD/OuvrageEvaDAO.java</file>
+            <file>file:/C:/Users/cdi205/Documents/monRepository/LibrairyAFPA_GFCE/src/java/accesBDD/StatusDOA.java</file>
         </group>
     </open-files>
 </project-private>
