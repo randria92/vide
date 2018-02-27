@@ -3,21 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package accesBDD;
+package traitement;
 
 import java.io.Serializable;
-import javax.naming.NamingException;
 
 /**
  *
  * @author cdi205
  */
-public class LigneDeCommandeDAO implements Serializable{
-    private MaConnexion mc;
-
-    public LigneDeCommandeDAO() throws NamingException {
-        mc = new MaConnexion();
-    }
-    
+public class GestionOuvrageEva implements Serializable{
     
 }

@@ -5,6 +5,7 @@
  */
 package Beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Vector;
  *
  * @author cdi205
  */
-public class OuvrageEva {
+public class OuvrageEva implements Serializable{
     private String ISBN;
     private String titre;
     private String sousTitre;

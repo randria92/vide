@@ -6,13 +6,14 @@
 package Beans;
 
 import accesBDD.MaConnexion;
+import java.io.Serializable;
 import javax.naming.NamingException;
 
 /**
  *
  * @author cdi205
  */
-public class LigneDeCommande extends OuvrageEva {
+public class LigneDeCommande extends OuvrageEva implements Serializable{
 
     
     private int numLigneDeCommande;

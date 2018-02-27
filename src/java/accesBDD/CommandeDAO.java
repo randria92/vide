@@ -7,6 +7,7 @@ package accesBDD;
 
 import Beans.Commande;
 import Beans.LigneDeCommande;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,18 +21,18 @@ import javax.naming.NamingException;
  *
  * @author cdi205
  */
-public class CommandeDAO {
+public class CommandeDAO implements Serializable{
     private MaConnexion mc;
 
     public CommandeDAO() throws NamingException {
         mc = new MaConnexion();
     }
     
-    public List<Commande> listeCommande() throws ClassNotFoundException, SQLException {
-        
-        Connection cnt = mc.getConnection();
-        Statement stm = cnt.createStatement();
-
+    public List<Commande> listeCommande(int numClient /*Cookie*/) throws ClassNotFoundException, SQLException {
+        List<Commande> lcom;
+       try( Connection cnt = mc.getConnection();
+        Statement stm = cnt.createStatement()){
+           
         List<LigneDeCommande> llcom = new ArrayList<>();
         String req1 = "SELECT idLigneDeCommande, ISBN, idCommande, quantiteOuvrageLigneDeCommande, TVAOuvrage, tauxPromotion FROM ligneDeCommande";
         ResultSet rs1 = stm.executeQuery(req1);
@@ -39,7 +40,7 @@ public class CommandeDAO {
         while (rs1.next()) {
             int numCommandeLlcom = rs1.getInt("idCommande");
             // if (numCommande == numCommandeLlcom) {
-
+            System.out.println("PBL: "+numCommandeLlcom);
             int numLigneCommande = rs1.getInt("idLigneDeCommande");
             String ISBNllcom = rs1.getString("ISBN");
 
@@ -49,16 +50,16 @@ public class CommandeDAO {
 
             ligneCommande = new LigneDeCommande(numLigneCommande, numCommandeLlcom, quantiteOuvragellcom, TVAOuvrage, tauxPromo, ISBNllcom);
             llcom.add(ligneCommande);
-            // }
+             
         }
 
-        List<Commande> lcom = new ArrayList<>();
-        String req = "SELECT idCommande,  idClient, idFormuleDeLivraison, idAdresseLivraisonCommande, dateCommande, statusCommande FROM commande";
+        lcom = new ArrayList<>();
+        String req = "SELECT idCommande,  idClient, idFormuleDeLivraison, idAdresseLivraisonCommande, dateCommande, statusCommande FROM commande WHERE idClient = "+numClient+"";
         ResultSet rs = stm.executeQuery(req);
         Commande commande = null;
         while (rs.next()) {
             int numCommande = rs.getInt("idCommande");
-            int numClient = rs.getInt("idClient");
+            numClient = rs.getInt("idClient");
             int formuleLivraison = rs.getInt("idFormuleDeLivraison");
             int adresseLivraison = rs.getInt("idAdresseLivraisonCommande");
             Date dateCommande = rs.getDate("dateCommande");
@@ -74,8 +75,11 @@ public class CommandeDAO {
             commande = new Commande(numClient, numLigneCommande, numCommande, dateCommande, statusCommande, formuleLivraison, adresseLivraison);
             lcom.add(commande);
         }
+       
         rs.close();
         rs1.close();
+       }
+        System.out.println("Commande "+ lcom.toString());
         return lcom;
 
     }

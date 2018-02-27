@@ -7,11 +7,13 @@ package Beans;
 
 import accesBDD.MaConnexion;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
+import traitement.GestionCommande;
 
 
 public class Commande extends LigneDeCommande implements Serializable{
@@ -153,6 +155,80 @@ public class Commande extends LigneDeCommande implements Serializable{
     public MaConnexion getMc() {
         return mc;
     }
+
+    @Override
+    public String toString() {
+        return "Commande{" + "numClient=" + numClient + ", numCommande=" + numCommande + ", dateCommande=" + dateCommande + ", statusCommande=" + statusCommande + ", numFormuleDeLivraison=" + numFormuleDeLivraison + ", numAdresseLivraison=" + numAdresseLivraison + ", prixTTC=" + prixTTC + '}';
+    }
+    public int quantiteTotalExpedieCommande(int numCommande, int numClient) throws ClassNotFoundException, SQLException, NamingException {
+        //List<LigneDeCommande> numCommandeLigneCom = new ArrayList();
+        GestionCommande pC = new GestionCommande();
+        List<Commande> listNumCommande = pC.listCommande(numClient);
+
+        int quantite = 0;
+
+        for (Commande c : listNumCommande) {
+            if (c.getNumCommande() == numCommande) {
+                List<LigneDeCommande> lldc = c.getListeLigneDecommande();
+                for (LigneDeCommande ldc : lldc) {
+                    int quantiteLdc = ldc.getQuantiteOuvrage();
+                    quantite += quantiteLdc;
+                }
+            }
+        }
+        return quantite;
+    }
     
+    Float prixTTCPromoTVAFLiv = 0f;
+
+        for (Commande c : listNumCommande) {
+
+            int numFormuleLiv = c.getNumFormuleDeLivraison();
+            PersistanceFormuleLivraison PFDL = new PersistanceFormuleLivraison();
+            Float PrixFDL = PFDL.prixFLV(numFormuleLiv);
+            
+            if (c.getNumCommande() == numCommande) {
+                List<LigneDeCommande> lldc = c.getListeLigneDecommande();
+                prixTTCPromoTVAFLiv += PrixFDL;
+                for (LigneDeCommande ldc : lldc) {
+
+                    int quantiteLdc = ldc.getQuantiteOuvrage();
+                    Float TVAouv = ldc.getTVAOuvrageLDC();
+                    Float promotionOuv = ldc.getTauxPromotion();
+
+                    Float prixHT = 0.00f;
+                    PersistanceOuvrages PO = new PersistanceOuvrages();
+
+                    List<Ouvrage> lO = null;
+                    try {
+                        lO = PO.objetTousLesOuvrage();
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(PersistanceCommande.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(PersistanceCommande.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    for (Ouvrage ouv : lO) {
+                        if (ouv.getISBN().equalsIgnoreCase(ldc.getISBN())) {
+                            prixHT = ouv.getPrixHT();
+                            ouv.toString();
+                            
+                        }
+                    }
+
+                    if (promotionOuv != null || promotionOuv != 0 || TVAouv != null || TVAouv != 0) {
+                        prixTTCPromoTVAFLiv += quantiteLdc * (prixHT +  (prixHT * (TVAouv / 100)) - (prixHT * (promotionOuv / 100)));
+                    } else {
+                        prixTTCPromoTVAFLiv += quantiteLdc * (prixHT + (prixHT * (TVAouv / 100)));
+                    }
+                    
+                }
+            }
+            
+        }
+
+        return prixTTCPromoTVAFLiv;
+    }
+
+
     
 }
