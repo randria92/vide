@@ -6,9 +6,11 @@
 package Servlets;
 
 import Beans.Commande;
+import accesBDD.StatusDOA;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +43,7 @@ public class controller extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NamingException {
         
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
@@ -66,17 +68,25 @@ public class controller extends HttpServlet {
         }
         
         if ("listCommande".equals(section)) {
+            
             try {
-                //List<String> clefs = gestionCommande.getCleDefaut();
-                List<String> lcom = gestionCommande.listCommande(5);
+                List<String> clefs = gestionCommande.getCleDefaut();
+                List<Commande> lcom = null;
+                StatusDOA sdoa = new StatusDOA();
+                
+                lcom = gestionCommande.listCommande(5);
+                System.out.println(lcom.toString());
+                request.setAttribute("clefsListCommande", clefs);
                 request.setAttribute("listCommande", lcom);
                 pageJSP = "/WEB-INF/jspCommandeS.jsp";
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                //to do
             } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
         pageJSP = response.encodeURL(pageJSP);
         getServletContext().getRequestDispatcher(pageJSP).include(request, response);
@@ -98,7 +108,11 @@ public class controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -112,7 +126,11 @@ public class controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

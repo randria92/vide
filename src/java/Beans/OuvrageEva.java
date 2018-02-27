@@ -30,7 +30,7 @@ public class OuvrageEva implements Serializable{
     private String commentaire;//null
     //private List <Auteur> auteur;//Tableau ?
     //private Vector <Avis> avisOuvrage;//tableau?
-    //private List <ThemeEtSousTheme> sousThemeEtTheme;//tableau?
+    private List <ThemeEtSousTheme> sousThemeEtTheme;//tableau?
     private Float promotionOuvrage;
     //private List <MotCle> motCleOuvrage;//tableau?
     private String marqueEditeurOuvrage;
@@ -70,7 +70,17 @@ public class OuvrageEva implements Serializable{
     public OuvrageEva(String ISBN) {
         this.ISBN = ISBN;
     }
-
+public OuvrageEva (String ISBN, String titre, String sousTitre, int quantiteDispo, Float prixHT, String disponibilite, Float TVAOuvrage,List<ThemeEtSousTheme> sousTheme, Float promotionOuvrage) {
+        this.ISBN = ISBN;
+        this.titre = titre;
+        this.sousTitre = sousTitre;
+        this.quantiteDispo = quantiteDispo;
+        this.prixHT = prixHT;
+        this.disponibilite = disponibilite;
+        this.TVAOuvrage = TVAOuvrage;
+        this.sousThemeEtTheme = sousTheme;
+        this.promotionOuvrage = promotionOuvrage;
+    }
 //    public Ouvrage(String ISBN, String titre, String sousTitre, int quantiteDispo, Float prixHT, String disponibilite, Float TVAOuvrage,List<ThemeEtSousTheme> sousTheme, Float promotionOuvrage) {
 //        this.ISBN = ISBN;
 //        this.titre = titre;

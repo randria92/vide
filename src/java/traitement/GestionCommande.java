@@ -7,9 +7,13 @@ package traitement;
 
 import Beans.Commande;
 import Beans.LigneDeCommande;
+import Beans.OuvrageEva;
 import accesBDD.CommandeDAO;
+import accesBDD.OuvrageEvaDAO;
+import accesBDD.StatusDOA;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,29 +42,31 @@ public class GestionCommande implements Serializable{
         return clefs;
     }
     
-    public List <String> StringlistCommande (int numClient) throws ClassNotFoundException, SQLException, NamingException{
-    List<String> ls = new ArrayList<>();
-        List <Commande> lcom = comDAO.listeCommande(numClient);
+    public List <Commande> listCommande (int numClient) throws ClassNotFoundException, SQLException, NamingException, ParseException{
+    //List<String> clefs = getCleDefaut();
+        //List<Commande> ls = new ArrayList<>();
+        List <Commande> lcom = comDAO.listeCommandeNumClient(numClient);
         for(Commande c : lcom){
-            String sLCom = c.getNumCommande()+" "+ c.getStatusCommande() +" "+ c.quantiteTotalExpedieCommande(c.getNumCommande(), numClient);//lcom.toString();
-            ls.add(sLCom);
+            
+            //String sLCom ="Num Commande"+ c.getNumCommande()+" Status "+ sdoa.affichageStatus(c.getStatusCommande()) +" Quantite expedie "+ this.quantiteTotalExpedieCommande(c.getNumCommande(), numClient) +" total Commande: "+this.totalCommande(c.getNumCommande()) +" Date Commande: "+ c.getDateCommande(String.valueOf(c.getDateCommande()));//lcom.toString();
+            //ls.add(c.getNumCommande());
         }
-        return ls;
-    }
-    
-    public List <Commande> listCommande (int numClient) throws ClassNotFoundException, SQLException{
-        
-        List <Commande> lcom = comDAO.listeCommande(numClient);
-        for(Commande p : lcom){
-                    lcom.add(p);
-            }
         return lcom;
     }
     
+//    public List <Commande> listCommande (int numClient) throws ClassNotFoundException, SQLException{
+//        
+//        List <Commande> lcom = comDAO.listeCommande(numClient);
+//        for(Commande p : lcom){
+//                    lcom.add(p);
+//            }
+//        return lcom;
+//    }
+    
     public Float totalCommande(int numCommande) throws NamingException, ClassNotFoundException, SQLException {
-        GestionCommande gC = new GestionCommande();
+        //GestionCommande gC = new GestionCommande();
         List<Commande> listNumCommande = null;
-            listNumCommande = gC.listCommande(numCommande);
+            listNumCommande = comDAO.listeCommandeNumCom(numCommande);
         
         Float prixTTCPromoTVAFLiv = 0f;
 
@@ -81,17 +87,10 @@ public class GestionCommande implements Serializable{
                     Float promotionOuv = ldc.getTauxPromotion();
 
                     Float prixHT = 0.00f;
-                    PersistanceOuvrages PO = new PersistanceOuvrages();
-
-                    List<Ouvrage> lO = null;
-                    try {
-                        lO = PO.objetTousLesOuvrage();
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(PersistanceCommande.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(PersistanceCommande.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    for (Ouvrage ouv : lO) {
+                    OuvrageEvaDAO ODAO = new OuvrageEvaDAO();
+                    List<OuvrageEva> lOE = ODAO.objetTousLesOuvrage();
+                    
+                    for (OuvrageEva ouv : lOE) {
                         if (ouv.getISBN().equalsIgnoreCase(ldc.getISBN())) {
                             prixHT = ouv.getPrixHT();
                             ouv.toString();
@@ -112,5 +111,7 @@ public class GestionCommande implements Serializable{
 
         return prixTTCPromoTVAFLiv;
     }
+    
+    
     
 }

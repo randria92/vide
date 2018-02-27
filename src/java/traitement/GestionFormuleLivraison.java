@@ -42,4 +42,6 @@ public class GestionFormuleLivraison implements Serializable {
         }
         return nomTransporteur;
     }
+    
+    
 }

@@ -5,15 +5,20 @@
  */
 package Beans;
 
+import accesBDD.CommandeDAO;
 import accesBDD.MaConnexion;
+import accesBDD.StatusDOA;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
 import traitement.GestionCommande;
+import traitement.GestionStatus;
 
 
 public class Commande extends LigneDeCommande implements Serializable{
@@ -22,6 +27,7 @@ public class Commande extends LigneDeCommande implements Serializable{
     private int numCommande;
     private Date dateCommande;
     private int statusCommande;
+    private String statusCommandeS;
     private Date delaiDatePaiement;//null
     private String commentaireCommande;//null
     private String adresseIPCommande;//null
@@ -65,6 +71,7 @@ public class Commande extends LigneDeCommande implements Serializable{
     }
 
     public Commande(int numClient,List<LigneDeCommande> listeLigneDecommande, int numCommande, Date dateCommande, int statusCommande, int numFormuleDeLivraison, int numAdresseLivraison) {
+        
         this.numClient = numClient;
         this.listeLigneDecommande = listeLigneDecommande;
         this.numCommande = numCommande;
@@ -119,9 +126,16 @@ public class Commande extends LigneDeCommande implements Serializable{
         }
         return dateCommandeS;
     }
-    
+
     public int getStatusCommande() {
         return statusCommande;
+    }
+    
+    public String getStatusCommande(int statusCommande) throws NamingException, SQLException, ClassNotFoundException {
+        StatusLibrairie sl = new StatusLibrairie(statusCommande);
+        StatusDOA sDOA = new StatusDOA();
+        String status = sDOA.affichageStatus(statusCommande);
+        return status;
     }
 
     public Date getDelaiDatePaiement() {
@@ -158,12 +172,21 @@ public class Commande extends LigneDeCommande implements Serializable{
 
     @Override
     public String toString() {
-        return "Commande{" + "numClient=" + numClient + ", numCommande=" + numCommande + ", dateCommande=" + dateCommande + ", statusCommande=" + statusCommande + ", numFormuleDeLivraison=" + numFormuleDeLivraison + ", numAdresseLivraison=" + numAdresseLivraison + ", prixTTC=" + prixTTC + '}';
+        try {
+            return "Commande{" + "numClient=" + numClient + ", numCommande=" + numCommande + ", dateCommande=" + dateCommande + ", statusCommande=" + this.getStatusCommande(statusCommande) + ", numFormuleDeLivraison=" + numFormuleDeLivraison + ", numAdresseLivraison=" + numAdresseLivraison + ", prixTTC=" + prixTTC + '}';
+        } catch (NamingException ex) {
+            Logger.getLogger(Commande.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Commande.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Commande.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
+    
     public int quantiteTotalExpedieCommande(int numCommande, int numClient) throws ClassNotFoundException, SQLException, NamingException {
-        //List<LigneDeCommande> numCommandeLigneCom = new ArrayList();
-        GestionCommande pC = new GestionCommande();
-        List<Commande> listNumCommande = pC.listCommande(numClient);
+        CommandeDAO comDAO = new CommandeDAO();
+        List<Commande> listNumCommande = comDAO.listeCommandeNumClient(numClient);
 
         int quantite = 0;
 
@@ -178,57 +201,5 @@ public class Commande extends LigneDeCommande implements Serializable{
         }
         return quantite;
     }
-    
-    Float prixTTCPromoTVAFLiv = 0f;
-
-        for (Commande c : listNumCommande) {
-
-            int numFormuleLiv = c.getNumFormuleDeLivraison();
-            PersistanceFormuleLivraison PFDL = new PersistanceFormuleLivraison();
-            Float PrixFDL = PFDL.prixFLV(numFormuleLiv);
-            
-            if (c.getNumCommande() == numCommande) {
-                List<LigneDeCommande> lldc = c.getListeLigneDecommande();
-                prixTTCPromoTVAFLiv += PrixFDL;
-                for (LigneDeCommande ldc : lldc) {
-
-                    int quantiteLdc = ldc.getQuantiteOuvrage();
-                    Float TVAouv = ldc.getTVAOuvrageLDC();
-                    Float promotionOuv = ldc.getTauxPromotion();
-
-                    Float prixHT = 0.00f;
-                    PersistanceOuvrages PO = new PersistanceOuvrages();
-
-                    List<Ouvrage> lO = null;
-                    try {
-                        lO = PO.objetTousLesOuvrage();
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(PersistanceCommande.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(PersistanceCommande.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    for (Ouvrage ouv : lO) {
-                        if (ouv.getISBN().equalsIgnoreCase(ldc.getISBN())) {
-                            prixHT = ouv.getPrixHT();
-                            ouv.toString();
-                            
-                        }
-                    }
-
-                    if (promotionOuv != null || promotionOuv != 0 || TVAouv != null || TVAouv != 0) {
-                        prixTTCPromoTVAFLiv += quantiteLdc * (prixHT +  (prixHT * (TVAouv / 100)) - (prixHT * (promotionOuv / 100)));
-                    } else {
-                        prixTTCPromoTVAFLiv += quantiteLdc * (prixHT + (prixHT * (TVAouv / 100)));
-                    }
-                    
-                }
-            }
-            
-        }
-
-        return prixTTCPromoTVAFLiv;
-    }
-
-
     
 }

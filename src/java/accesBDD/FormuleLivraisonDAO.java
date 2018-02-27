@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
+import traitement.GestionFormuleLivraison;
 
 public class FormuleLivraisonDAO implements Serializable{
     private MaConnexion mc;
@@ -41,26 +42,7 @@ public class FormuleLivraisonDAO implements Serializable{
             return fdl;
     }
     
-    public Float prixFLV( int numFormuleDeLivraison){
-        PersistanceFormuleLivraison PFDL = new PersistanceFormuleLivraison();
-        List <FormuleDeLivraison> lFdl = null;
-        try {
-            lFdl = PFDL.listeFormuleLivraison();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PersistanceFormuleLivraison.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(PersistanceFormuleLivraison.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        Float prixFdL=0f;
-        
-        for (FormuleDeLivraison fdl : lFdl){
-            if (numFormuleDeLivraison == fdl.getNumFormuleLivraison()){
-                prixFdL = fdl.getPrixFormuleDeLivraison();
-            }
-        }
-        return prixFdL;
-    }
+    
     
     
 }
