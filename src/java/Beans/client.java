@@ -35,9 +35,6 @@ import java.sql.Date;
         this.emailClient = emailClient;
     }
 
-   
-  
-   
     public client(int idClient, String civiliteClient, String nomClient, String prenomClient, Date dateNaissanceClient, String societeClient, String telephoneClient, String emailClient, String motDePasseClient, Date dateAdhesionClient, Date dateFinAdhesionClient, String commentaireClient, int statusClient, int statusConnexionClient) {
         this.idClient = idClient;
         this.civiliteClient = civiliteClient;

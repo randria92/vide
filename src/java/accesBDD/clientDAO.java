@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package accesBDD;
 
 import Beans.client;
@@ -25,16 +20,25 @@ public class clientDAO {
         mc = new MaConnexion();
     }
     
+    //---- liste adresses par  client -----
+//    public List<adresse> rechercheAdresseParClient(String mail){
+//
+//    }
+    
+    //-- si mail existe pas la peine de s'inscrire --- renvoie mail existant.
     public List<client> rechercheClientparMail(String mail) throws SQLException{
        
         Connection cnt = mc.getConnection();
         PreparedStatement stm =  (PreparedStatement) cnt.createStatement();
          
         List<client> clt = new ArrayList();
-        String req = "Select * from client where emailClient=?";
+        String req = "Select nomClient,prenomClient from client where emailClient=?";
         ResultSet rs = stm.executeQuery(req);
+        stm.setString(1, mail);
+        
         client clientTrouve = null;
-        if(rs != null){
+        //--- on retourne ou non un resultat ici.
+        if(rs.next()){
             String nom = rs.getString("nomClient");
             String prenom = rs.getString("prenomClient");
             String email = rs.getString("emailClient");
@@ -48,8 +52,4 @@ public class clientDAO {
 
         return clt;
     }
-    
-    
-    
-    
 }

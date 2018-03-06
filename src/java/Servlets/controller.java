@@ -13,7 +13,6 @@ import Beans.FormuleDeLivraison;
 import Beans.LigneDeCommande;
 import Beans.Ouvrage;
 import Beans.Panier;
-import accesBDD.CommandeDAO;
 import accesBDD.OuvragesDAOGui;
 import accesBDD.avisDAO;
 import java.io.IOException;
