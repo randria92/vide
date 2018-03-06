@@ -23,12 +23,10 @@ public class StatusDOA {
         mc = new MaConnexion();
     }
      public String affichageStatus(int status) throws SQLException, ClassNotFoundException {
-        
-        
         String lsL = null;
+        try(Connection cnt = mc.getConnection();
+        Statement stm = cnt.createStatement()){
         String req = "Select idStatusLibrairie, descriptionStatusLibrairie FROM statusLibrairie";
-        Connection cnt = mc.getConnection();
-        Statement stm = cnt.createStatement();
         ResultSet rs = stm.executeQuery(req);
         StatusLibrairie sL = null;
         while (rs.next()) {
@@ -38,9 +36,8 @@ public class StatusDOA {
             if (status == numStatus) {
                 lsL = descriptionStatus;
             }
-
+        }
         }
         return lsL;
     }
-     
 }

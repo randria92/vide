@@ -1,0 +1,12 @@
+
+
+#sectionFixe {
+    position: fixed;
+    background: black;
+    height: available;
+    
+    left: 0;
+    bottom: 0;
+    top: 0;
+    
+}

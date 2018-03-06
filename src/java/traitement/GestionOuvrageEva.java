@@ -5,7 +5,7 @@
  */
 package traitement;
 
-import Beans.OuvrageEva;
+import Beans.Ouvrage;
 import accesBDD.MaConnexion;
 import accesBDD.OuvrageEvaDAO;
 import java.io.Serializable;
@@ -27,9 +27,9 @@ public class GestionOuvrageEva implements Serializable{
     public Float prixOuvrage(String ISBN) throws ClassNotFoundException, SQLException, NamingException {
         //PersistanceOuvrages PO = new PersistanceOuvrages();
         OuvrageEvaDAO ODAO = new OuvrageEvaDAO();
-        List<OuvrageEva> Louv = ODAO.objetTousLesOuvrage();
+        List<Ouvrage> Louv = ODAO.objetTousLesOuvrage();
         Float prixOuvrage = 0f;
-        for (OuvrageEva ouv : Louv) {
+        for (Ouvrage ouv : Louv) {
             if (ouv.getISBN().equalsIgnoreCase(ISBN)) {
                 Float prixOuv = ouv.getPrixHT();
                 Float TVAOuv = ouv.getTVAOuvrage() / 100;

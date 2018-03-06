@@ -43,5 +43,9 @@ public class GestionFormuleLivraison implements Serializable {
         return nomTransporteur;
     }
     
+    public List<FormuleDeLivraison> listeFormuleLivraison() throws ClassNotFoundException, SQLException, NamingException{
+       List<FormuleDeLivraison> lFDL = fDAO.listeFormuleLivraison();
+       return lFDL;
+    }
     
 }

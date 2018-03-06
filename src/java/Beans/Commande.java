@@ -7,6 +7,7 @@ package Beans;
 
 import accesBDD.CommandeDAO;
 import accesBDD.MaConnexion;
+import accesBDD.OuvrageEvaDAO;
 import accesBDD.StatusDOA;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import traitement.GestionCommande;
+import traitement.GestionFormuleLivraison;
 import traitement.GestionStatus;
 
 
@@ -112,10 +114,11 @@ public class Commande extends LigneDeCommande implements Serializable{
         
         try {
         Date dateCommandeSQL = new SimpleDateFormat("yyyy-MM-dd").parse(recherche);
-        dateCommandeS = spdf.format(dateCommandeSQL);
+        dateCommandeS = sdf01.format(dateCommandeSQL);
         return dateCommandeS;
-        }catch(ParseException ex){
+        }catch(ParseException exx){
         System.out.println("NoN sql");
+        }
         try{
         Date dateCommandeSQL = new SimpleDateFormat("dd/MM/yyyy").parse(recherche);
         dateCommandeS = sdf01.format(dateCommandeSQL);
@@ -123,7 +126,7 @@ public class Commande extends LigneDeCommande implements Serializable{
         }catch(ParseException exj){
             System.out.println("nonJava");
         }
-        }
+        
         return dateCommandeS;
     }
 
@@ -201,5 +204,54 @@ public class Commande extends LigneDeCommande implements Serializable{
         }
         return quantite;
     }
+    
+    public Float totalCommande(int numCommande) throws NamingException, ClassNotFoundException, SQLException {
+        CommandeDAO comDAO = new CommandeDAO();
+        List<Commande> listNumCommande = comDAO.listeCommandeNumCom(numCommande);
+        
+        Float prixTTCPromoTVAFLiv = 0f;
+
+        for (Commande c : listNumCommande) {
+
+            int numFormuleLiv = c.getNumFormuleDeLivraison();
+            GestionFormuleLivraison GFDL = new GestionFormuleLivraison();
+            //PersistanceFormuleLivraison PFDL = new PersistanceFormuleLivraison();
+            Float PrixFDL = GFDL.prixFLV(numFormuleLiv);
+            
+            if (c.getNumCommande() == numCommande) {
+                List<LigneDeCommande> lldc = c.getListeLigneDecommande();
+                prixTTCPromoTVAFLiv += PrixFDL;
+                for (LigneDeCommande ldc : lldc) {
+
+                    int quantiteLdc = ldc.getQuantiteOuvrage();
+                    Float TVAouv = ldc.getTVAOuvrageLDC();
+                    Float promotionOuv = ldc.getTauxPromotion();
+
+                    Float prixHT = 0.00f;
+                    OuvrageEvaDAO ODAO = new OuvrageEvaDAO();
+                    List<Ouvrage> lOE = ODAO.objetTousLesOuvrage();
+                    
+                    for (Ouvrage ouv : lOE) {
+                        if (ouv.getISBN().equalsIgnoreCase(ldc.getISBN())) {
+                            prixHT = ouv.getPrixHT();
+                            ouv.toString();
+                            
+                        }
+                    }
+
+                    if (promotionOuv != null || promotionOuv != 0 || TVAouv != null || TVAouv != 0) {
+                        prixTTCPromoTVAFLiv += quantiteLdc * (prixHT +  (prixHT * (TVAouv / 100)) - (prixHT * (promotionOuv / 100)));
+                    } else {
+                        prixTTCPromoTVAFLiv += quantiteLdc * (prixHT + (prixHT * (TVAouv / 100)));
+                    }
+                    
+                }
+            }
+            
+        }
+
+        return prixTTCPromoTVAFLiv;
+    }
+    
     
 }

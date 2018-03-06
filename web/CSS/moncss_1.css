@@ -1,0 +1,40 @@
+.menu, .menu li {
+    display: inline;
+}
+
+.carre{
+    font-family: 'ananda_blackregular';
+    color: rgb(9, 24, 26);
+    border-style: solid;
+    margin-right: 100px;
+    margin-left: 100px;
+    margin-bottom: 60px;
+    padding-left: 8px;
+    padding-right: 8px;
+    width: 150px;
+    /*height: 150px;*/
+    background-color: rgba(188, 188, 123, 0.3);
+    border-radius: 9px;
+    display: inline-block
+}
+
+.carre img{
+    width: 80px;
+}
+
+.recherche, .recherche input{
+    display: inline;
+    
+}
+
+/*@font-face {
+    font-family: 'ananda_blackregular';
+    src: url('/librairieFrontEnd(Gui)/font/ananda_black_personal_use.eot');
+    src: url('/librairieFrontEnd(Gui)/font/ananda_black_personal_use.eot?#iefix') format('embedded-opentype'),
+         url('/librairieFrontEnd(Gui)/font/ananda_black_personal_use.woff2') format('woff2'),
+         url('/librairieFrontEnd(Gui)/font/ananda_black_personal_use.woff') format('woff'),
+         url('/librairieFrontEnd(Gui)/font/ananda_black_personal_use.svg#ananda_blackregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
+

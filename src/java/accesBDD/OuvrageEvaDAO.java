@@ -5,7 +5,8 @@
  */
 package accesBDD;
 
-import Beans.OuvrageEva;
+import Beans.Ouvrage;
+import Beans.Ouvrage;
 import Beans.Promotion;
 import Beans.ThemeEtSousTheme;
 import java.io.Serializable;
@@ -30,10 +31,10 @@ public class OuvrageEvaDAO implements Serializable{
         mc= new MaConnexion();
     }
      
-    public List<OuvrageEva> objetTousLesOuvrage() throws ClassNotFoundException, SQLException {
-        
-        Connection cnt = mc.getConnection();
-        Statement stm = cnt.createStatement();
+    public List<Ouvrage> objetTousLesOuvrage() throws ClassNotFoundException, SQLException {
+        List<Ouvrage> tousLesOuvrage;
+        try(Connection cnt = mc.getConnection();
+        Statement stm = cnt.createStatement()){
 
         //Toute les promo rattachée aux ouvrages
         List<Promotion> promoTabl = new ArrayList();
@@ -74,7 +75,7 @@ public class OuvrageEvaDAO implements Serializable{
 
         //Tous les ouvrages
         String req = "SELECT ISBN, titreOuvrage, sousTitreOuvrage, quantiteDispoOuvrage, prixHTOuvrage, disponibiliteOuvrage, TVAOuvrage FROM ouvrage ouv";
-        List<OuvrageEva> tousLesOuvrage = new ArrayList();
+        tousLesOuvrage = new ArrayList();
         ResultSet rs = stm.executeQuery(req);
 
         while (rs.next()) {
@@ -86,12 +87,12 @@ public class OuvrageEvaDAO implements Serializable{
             String disponibiliteOuvrage = rs.getString("disponibiliteOuvrage");
             Float TVAOuvrage = rs.getFloat("TVAOuvrage");
 
-            List<ThemeEtSousTheme> themesOuvrage = new ArrayList<>();
-            for (ThemeEtSousTheme sf : tablSouTheme) {//si l'isbn en cour est présent dans le tableau de theme tu ajoute la ligne du tableau theme a un nouveau tableau pour louvrage en cours
-                if (ISBNOuvrage.equalsIgnoreCase(sf.getISBNSousTheme())) {
-                    themesOuvrage.add(sf);
-                }
-            }
+//            List<ThemeEtSousTheme> themesOuvrage = new ArrayList<>();
+//            for (ThemeEtSousTheme sf : tablSouTheme) {//si l'isbn en cour est présent dans le tableau de theme tu ajoute la ligne du tableau theme a un nouveau tableau pour louvrage en cours
+//                if (ISBNOuvrage.equalsIgnoreCase(sf.getISBNSousTheme())) {
+//                    themesOuvrage.add(sf);
+//                }
+//            }
 
             Float promoOuv = null;
             for (Promotion promo : promoTabl) {
@@ -99,13 +100,14 @@ public class OuvrageEvaDAO implements Serializable{
                     promoOuv = promo.getTauxPromotion();
                 }
             }
-            OuvrageEva ouv = new OuvrageEva(ISBNOuvrage, titreOuvrage, sousTitreOuvrage, quantiteDispoOuvrage, prixHTOuvrage, disponibiliteOuvrage, TVAOuvrage, themesOuvrage, promoOuv);
+            Ouvrage ouv = new Ouvrage(ISBNOuvrage, titreOuvrage, sousTitreOuvrage, quantiteDispoOuvrage, prixHTOuvrage, disponibiliteOuvrage, TVAOuvrage, promoOuv);
 
             tousLesOuvrage.add(ouv);
         }
         //rs.close();
        // rs2.close();
         //rs1.close();
+        }
         return tousLesOuvrage;
         
         
@@ -113,13 +115,13 @@ public class OuvrageEvaDAO implements Serializable{
     
     public void reductionStockOuvrage(String ISBN, int quantiteOuvrageAchete) throws ClassNotFoundException, SQLException {
         
-        Connection cnt = mc.getConnection();
+        try(Connection cnt = mc.getConnection()){
         String req = "UPDATE ouvrage SET quantiteDispoOuvrage = ? WHERE ISBN = ?";
         PreparedStatement pstm = cnt.prepareCall(req);
        
-        List<OuvrageEva> lOuv = this.objetTousLesOuvrage();
+        List<Ouvrage> lOuv = this.objetTousLesOuvrage();
 
-        for (OuvrageEva ouv : lOuv) {
+        for (Ouvrage ouv : lOuv) {
             if (ouv.getISBN().equalsIgnoreCase(ISBN)) {
                 
                 int quantiteRestante = ouv.getQuantiteDispo() - quantiteOuvrageAchete;
@@ -138,7 +140,57 @@ public class OuvrageEvaDAO implements Serializable{
         }
         pstm.executeUpdate();
         //pstm.close();
+        }
     }
 
+     public List<Ouvrage> selectAllOuvrages() throws SQLException{
+        String req = "select o.ISBN, o.titreOuvrage, o.quantiteDispoOuvrage, o.prixHTOuvrage, o.disponibiliteOuvrage, o.dateParutionOuvrage, o.TVAOuvrage, o.idFournisseur "
+                + "from ouvrage o order by o.titreOuvrage";
+        List<Ouvrage> lo;
+        try(Connection cnt = mc.getConnection();
+        Statement stm = cnt.createStatement()){
+        lo = new ArrayList<>();
+         
+            ResultSet rs = stm.executeQuery(req);
      
+            while (rs.next()) {
+                String isbn = rs.getString("ISBN");
+                String titreOuvrage = rs.getString("titreOuvrage");
+                String disponibiliteOuvrage = rs.getString("disponibiliteOuvrage");
+                int quantiteDispoOuvrage = rs.getInt("quantiteDispoOuvrage");
+                int idFournisseur = rs.getInt("idFournisseur");
+                float prixHTOuvrage = rs.getFloat("prixHTOuvrage");
+                float TVAOuvrage = rs.getFloat("TVAOuvrage");
+                java.sql.Date dateParutionOuvrage = rs.getDate("dateParutionOuvrage");
+                Ouvrage o = new Ouvrage(isbn, titreOuvrage, disponibiliteOuvrage, quantiteDispoOuvrage, idFournisseur, prixHTOuvrage, TVAOuvrage, dateParutionOuvrage);
+                lo.add(o);
 }
+            rs.close();
+        }
+        return lo; 
+    }
+    
+     public Ouvrage selectOuvrageByISBN(String isbn) throws SQLException{
+        String req ="select * from ouvrage where ISBN = ?";
+        Ouvrage o = null;
+        try(Connection cnt = mc.getConnection();
+            PreparedStatement stm = cnt.prepareStatement(req);
+            ){
+            stm.setString(1, isbn);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                String titreOuvrage = rs.getString("titreOuvrage");
+                String disponibiliteOuvrage = rs.getString("disponibiliteOuvrage");
+                int quantiteDispoOuvrage = rs.getInt("quantiteDispoOuvrage");
+                int idFournisseur = rs.getInt("idFournisseur");
+                float prixHTOuvrage = rs.getFloat("prixHTOuvrage");
+                float TVAOuvrage = rs.getFloat("TVAOuvrage");
+                java.sql.Date dateParutionOuvrage = rs.getDate("dateParutionOuvrage");
+                o = new Ouvrage(isbn, titreOuvrage, disponibiliteOuvrage, quantiteDispoOuvrage, idFournisseur, prixHTOuvrage, TVAOuvrage, dateParutionOuvrage);
+            }
+        }
+        return o;
+    }
+}
+
+

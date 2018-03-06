@@ -1,0 +1,160 @@
+
+/*--------TABLEAU LISTE DE COMMANDE -------------*/
+.commande:hover
+{
+    background-color: #e6e6e6; 
+    cursor: pointer;
+
+}
+/*---------------MENU EN HAUT----------------*/
+footer{
+    
+}
+ul, footer {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li, footer p{
+    float: left;
+}
+
+li a, footer p{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+/*-----------MENU COTE GAUCHE------------------*/
+.section:nth-child(1) {
+    
+    text-align: center;
+    margin: 0;
+    width: 220px;
+    background-color: #f1f1f1;
+    height: available;
+}
+
+.section:nth-child(1) a  {
+
+    display: block;
+    color: #000;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    text-decoration: none;
+    height: available;
+}
+
+/* Change the link color on hover */
+.section:nth-child(1) a:hover   {
+
+    background-color: #555;
+    color: white;
+    height: available;
+}
+.bordereau {
+    margin-left: 25%;
+}
+
+.tableCommandes{
+    margin-top: 0px;
+
+}
+
+/*---------BLOCK COMMUN------------*/
+
+.section:nth-child(2){
+    margin-top: 50px;
+    margin-left: 150px;
+}
+.section:nth-child(3){
+    margin-top: 50px;
+    margin-left: 150px;
+}
+
+#conteneur
+{
+    display: flex; 
+    flex-direction:row;
+    height: auto;
+    
+}
+
+
+/*------JSP PANIER------*/
+
+#boutonPanierConteneur
+{
+    display: flex; 
+    flex-direction: row; 
+    alignment-adjust: central;
+}
+
+.boutonPanier 
+{
+    margin-top: 30px;
+    margin-left: 150px;
+    flex-align: auto;
+}
+.imgValidee{
+    height: 28px;
+    width: 28px;  
+    margin-left: 20px; 
+}
+.imgModifier
+{
+    height: 28px;
+    width: 28px;  
+    margin-left: 20px;
+}
+
+.boutonPaiement {
+    color: #000;
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    margin-left: 0;
+}
+.boutonPaiement:hover{
+    background-color: #555;
+    color: white;
+}
+.imgPrevious{
+    height: 28px;
+    width: 28px;  
+    margin-left: 20px;
+}
+
+#sectionFixeBas{
+    position: fixed;
+    width: available;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#sectionFixeHaut{
+    position: fixed;
+    width: available;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#sectionFixeGauche.section{
+    margin-top: 40px;
+    position: inherit;
+    height: available;
+    
+}

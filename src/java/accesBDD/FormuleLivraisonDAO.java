@@ -22,11 +22,11 @@ public class FormuleLivraisonDAO implements Serializable{
     }
     
     public List<FormuleDeLivraison> listeFormuleLivraison() throws ClassNotFoundException, SQLException, NamingException {
+        List<FormuleDeLivraison> fdl;
+        try(Connection cnt = mc.getConnection();
+        Statement stm = cnt.createStatement()){
         
-        Connection cnt = mc.getConnection();
-        Statement stm = cnt.createStatement();
-        
-        List<FormuleDeLivraison> fdl = new ArrayList<>();
+        fdl = new ArrayList<>();
             String req = "SELECT idFormuleDeLivraison, nomTransporteur, prixFormuleDeLivraison, descriptionFormuleDeLivraison FROM formuleDeLivraison";
             ResultSet rs = stm.executeQuery(req);
             FormuleDeLivraison formuleLivraison = null;
@@ -39,6 +39,7 @@ public class FormuleLivraisonDAO implements Serializable{
             formuleLivraison = new FormuleDeLivraison(numFlv, nomFlv, prixFlv, descFlv);
             fdl.add(formuleLivraison);
             }
+        }
             return fdl;
     }
     

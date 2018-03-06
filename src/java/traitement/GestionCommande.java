@@ -7,7 +7,7 @@ package traitement;
 
 import Beans.Commande;
 import Beans.LigneDeCommande;
-import Beans.OuvrageEva;
+import Beans.Ouvrage;
 import accesBDD.CommandeDAO;
 import accesBDD.OuvrageEvaDAO;
 import accesBDD.StatusDOA;
@@ -88,9 +88,9 @@ public class GestionCommande implements Serializable{
 
                     Float prixHT = 0.00f;
                     OuvrageEvaDAO ODAO = new OuvrageEvaDAO();
-                    List<OuvrageEva> lOE = ODAO.objetTousLesOuvrage();
+                    List<Ouvrage> lOE = ODAO.objetTousLesOuvrage();
                     
-                    for (OuvrageEva ouv : lOE) {
+                    for (Ouvrage ouv : lOE) {
                         if (ouv.getISBN().equalsIgnoreCase(ldc.getISBN())) {
                             prixHT = ouv.getPrixHT();
                             ouv.toString();
