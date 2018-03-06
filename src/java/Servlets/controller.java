@@ -144,7 +144,8 @@ public class controller extends HttpServlet {
         if ("menu-main".equals(section)) {
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
-
+        
+        //----connexion client OK---
         if ("connexionClient".equals(section) || login) {
             //uniquement connexion validé
             login = true;
@@ -405,7 +406,7 @@ public class controller extends HttpServlet {
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
         
-
+        //----------------------------------------------
         if (getServletContext().getAttribute("gestionFormuleLivraison") == null) {
             try {
                 getServletContext().setAttribute("gestionFormuleLivraison", new GestionFormuleLivraison());
@@ -414,6 +415,8 @@ public class controller extends HttpServlet {
                 //to do
             }
         }
+        
+        //----------------------------------------------
         GestionFormuleLivraison gestionFormuleLivraison = (GestionFormuleLivraison) getServletContext().getAttribute("gestionFormuleLivraison");
         boolean affichageChoixFormuleLivraison = false;
         if ("choixFormuleLivraison".equals(section)) {
@@ -436,7 +439,8 @@ public class controller extends HttpServlet {
             }
 
         }
-
+        
+        //----------------------------------------------
         //RECHERCHE a voir (COMBOBOX theme a faire )
         if (request.getParameter("okRech") != null) {
             boolean affOuvrage = true;
@@ -458,6 +462,8 @@ public class controller extends HttpServlet {
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
 
         }
+        
+        //----------------------------------------------
         boolean affOuvrage = false;
         boolean ajoutPanier = false;
         if ("ajout-panier".equals(section)) {
@@ -497,6 +503,8 @@ public class controller extends HttpServlet {
 
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
+        
+        //----------------------------------------------
         boolean affPanier = false;
         boolean addPanier = false;
         if ("add".equals(section)) {
@@ -519,6 +527,8 @@ public class controller extends HttpServlet {
 
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
+        
+        //----------------------------------------------
         boolean decPanier = false;
         if ("dec".equals(section)) {
             affPanier = true;
@@ -533,7 +543,8 @@ public class controller extends HttpServlet {
 
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
-
+        
+        //----------------------------------------------
         boolean delPanier = false;
         if ("del".equals(section)) {
             affPanier = true;
@@ -548,7 +559,8 @@ public class controller extends HttpServlet {
 
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
-
+        
+        //----------------------------------------------
         if ("afficher-ouvrage".equals(section) || affOuvrage) {
             affOuvrage = true;
             request.setAttribute("affOuvrage", affOuvrage);
@@ -567,7 +579,8 @@ public class controller extends HttpServlet {
             request.setAttribute("liste", lo);
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
-
+        
+        //----------------------------------------------
         boolean affUnOuvrage = false;
         if ("afficher-UnOuvrage".equals(section)) {
             affUnOuvrage = true;
@@ -589,7 +602,8 @@ public class controller extends HttpServlet {
 
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
-
+        
+        //----------------------------------------------
         if ("viderPanier".equals(section)) {
             Panier p = (Panier) session.getAttribute("monPanier");
             System.out.println(session.getAttribute("monPanier"));
@@ -602,7 +616,8 @@ public class controller extends HttpServlet {
             getServletContext().setAttribute("gestionPanier", new Panier());
         }
         Panier gestionPanier = (Panier) getServletContext().getAttribute("gestionPanier");
-
+        
+        //----------------------------------------------
         if ("affichagePanier".equals(section) || affPanier) {
             affPanier = true;
             request.setAttribute("affPanier", affPanier);
@@ -614,6 +629,8 @@ public class controller extends HttpServlet {
 
             pageJSP = "/WEB-INF/menus/menu-main.jsp";
         }
+        
+        //----------------------------------------------
         boolean panierValider = false;
         if ("panierValider".equals(section)) {
             try {
