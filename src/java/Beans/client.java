@@ -8,8 +8,9 @@ package Beans;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class client implements Serializable{
-    
+////public class client implements Serializable{
+ public class client{
+     
    private int idClient; 
    private String civiliteClient;
    private String nomClient;          
@@ -28,6 +29,15 @@ public class client implements Serializable{
    public client(){       
    }
 
+    public client(String nomClient, String prenomClient, String emailClient) {
+        this.nomClient = nomClient;
+        this.prenomClient = prenomClient;
+        this.emailClient = emailClient;
+    }
+
+   
+  
+   
     public client(int idClient, String civiliteClient, String nomClient, String prenomClient, Date dateNaissanceClient, String societeClient, String telephoneClient, String emailClient, String motDePasseClient, Date dateAdhesionClient, Date dateFinAdhesionClient, String commentaireClient, int statusClient, int statusConnexionClient) {
         this.idClient = idClient;
         this.civiliteClient = civiliteClient;
